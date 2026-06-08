@@ -1,0 +1,16 @@
+package com.agl.ml.designsystem
+
+import androidx.compose.ui.unit.dp
+
+object MSSpacing {
+    val none = 0.dp
+    val xxs = 2.dp
+    val xs = 4.dp
+    val sm = 8.dp
+    val md = 16.dp
+    val lg = 24.dp
+    val xl = 32.dp
+    val xxl = 48.dp
+    val xxxl = 64.dp
+    val huge = 96.dp
+}
