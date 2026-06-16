@@ -1,7 +1,7 @@
-package com.agl.ml
+package com.appgolive.meescanner
 
 import android.app.Application
-import com.agl.ml.di.initKoin
+import com.appgolive.meescanner.di.initKoin
 import org.koin.android.ext.koin.androidContext
 
 class MLApplication : Application() {

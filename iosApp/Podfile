@@ -1,0 +1,9 @@
+platform :ios, '15.5'
+
+target 'iosApp' do
+  # Change use_frameworks! to use static linkage
+  use_frameworks! :linkage => :static
+
+  # Pods for iosApp
+  pod 'GoogleMLKit/BarcodeScanning', '8.0.0'
+end

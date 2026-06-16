@@ -1,8 +1,13 @@
-package com.agl.ml.qr.ui
+package com.appgolive.meescanner.qr.ui
 
-import com.agl.ml.qr.model.AppInfo
+import com.appgolive.meescanner.qr.model.AppInfo
+
 
 expect class AppResolver {
+
+    fun getApps(
+        link: String?
+    )
 
     fun getUpiApps(
         upiLink: String
@@ -11,4 +16,8 @@ expect class AppResolver {
     fun getUrlApps(
         url: String
     ): List<AppInfo>
+
+    fun getDocApp(
+        link: String?
+    )
 }

@@ -1,10 +1,12 @@
-package com.agl.ml.home.util
+package com.appgolive.meescanner.util
 
+import coil3.Bitmap
 
 object QrContentAnalyzer {
 
     fun analyze(
-        rawValue: String
+        rawValue: String,
+        frame: Bitmap?
     ): QrContent {
 
         return when {
@@ -13,7 +15,7 @@ object QrContentAnalyzer {
                 prefix = "upi://pay",
                 ignoreCase = true
             ) -> {
-                QrContent.Upi(rawValue)
+                QrContent.Upi(rawValue, frame)
             }
 
             rawValue.startsWith(
@@ -23,35 +25,35 @@ object QrContentAnalyzer {
                 prefix = "https://",
                 ignoreCase = true
             ) -> {
-                QrContent.Url(rawValue)
+                QrContent.Url(rawValue, frame)
             }
 
             rawValue.startsWith(
                 prefix = "WIFI:",
                 ignoreCase = true
             ) -> {
-                QrContent.Wifi(rawValue)
+                QrContent.Wifi(rawValue, frame)
             }
 
             rawValue.startsWith(
                 prefix = "BEGIN:VCARD",
                 ignoreCase = true
             ) -> {
-                QrContent.Contact(rawValue)
+                QrContent.Contact(rawValue, frame)
             }
 
             rawValue.startsWith(
                 prefix = "mailto:",
                 ignoreCase = true
             ) -> {
-                QrContent.Email(rawValue)
+                QrContent.Email(rawValue, frame)
             }
 
             rawValue.startsWith(
                 prefix = "tel:",
                 ignoreCase = true
             ) -> {
-                QrContent.Phone(rawValue)
+                QrContent.Phone(rawValue, frame)
             }
 
             rawValue.startsWith(
@@ -61,11 +63,11 @@ object QrContentAnalyzer {
                 prefix = "smsto:",
                 ignoreCase = true
             ) -> {
-                QrContent.Sms(rawValue)
+                QrContent.Sms(rawValue, frame)
             }
 
             else -> {
-                QrContent.PlainText(rawValue)
+                QrContent.PlainText(rawValue, frame)
             }
         }
     }

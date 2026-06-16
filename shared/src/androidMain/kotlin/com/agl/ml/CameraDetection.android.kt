@@ -64,13 +64,12 @@ class ObjectOverlayView(context: android.content.Context) : View(context) {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        val scaleX = width.toFloat() / imageHeight  // rotated: width maps to height
+        val scaleX = width.toFloat() / imageHeight
         val scaleY = height.toFloat() / imageWidth
 
         for (obj in detectedObjects) {
             val box = obj.boundingBox
 
-            // Scale bounding box from image coords to view coords
             val scaledBox = RectF(
                 box.left * scaleX,
                 box.top * scaleY,
@@ -86,7 +85,6 @@ class ObjectOverlayView(context: android.content.Context) : View(context) {
             } ?: ""
             val displayText = "$label$confidence"
 
-            // Draw background behind text for readability
             val textWidth = textPaint.measureText(displayText)
             canvas.drawRect(
                 scaledBox.left,

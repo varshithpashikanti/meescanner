@@ -1,13 +1,13 @@
-package com.agl.ml.qr.viewmodel
+package com.appgolive.meescanner.qr.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.agl.ml.home.util.QrContent
-import com.agl.ml.home.util.QrContentAnalyzer
-import com.agl.ml.qr.model.AppInfo
-import com.agl.ml.qr.ui.AppResolver
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import coil3.Bitmap
+import com.appgolive.meescanner.qr.model.AppInfo
+import com.appgolive.meescanner.qr.ui.AppResolver
+import com.appgolive.meescanner.util.QrContent
 
 class QrViewModel(private val appResolver: AppResolver) : ViewModel() {
 
@@ -19,32 +19,36 @@ class QrViewModel(private val appResolver: AppResolver) : ViewModel() {
     val availableApps = _availableApps.asStateFlow()
 
     fun processQr(
-        rawValue: String
+        rawValue: String,
+        frame: Bitmap?
     ) {
-        val content = QrContentAnalyzer.analyze(rawValue)
-        _qrContent.value = content
+//        val content = QrContentAnalyzer.analyze(rawValue, frame)
+      //  _qrContent.value = content
 
-        when(content) {
+        appResolver.getApps(rawValue)
 
-            is QrContent.Upi -> {
-                _availableApps.value =
-                    appResolver.getUpiApps(
-                        content.rawValue
-                    )
-            }
-
-            is QrContent.Url -> {
-                _availableApps.value =
-                    appResolver.getUrlApps(
-                        content.rawValue
-                    )
-            }
-
-            else -> {
-                _availableApps.value =
-                    emptyList()
-            }
-        }
+//        when(content) {
+//
+////            is QrContent.Upi -> {
+////                appResolver.getApps(content.rawValue)
+////                _availableApps.value =
+////                    appResolver.getUpiApps(
+////                        content.rawValue
+////                    )
+////            }
+////
+////            is QrContent.Url -> {
+////                appResolver.getApps(content.rawValue)
+////                _availableApps.value =
+////                    appResolver.getUrlApps(
+////                        content.rawValue
+////                    )
+////            }
+//
+//            else -> {
+//                appResolver.getApps(rawValue)
+//            }
+//        }
     }
 
     fun clearQr(){

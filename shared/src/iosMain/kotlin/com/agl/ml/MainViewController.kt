@@ -1,4 +1,4 @@
-package com.agl.ml
+package com.appgolive.meescanner
 
 import androidx.compose.ui.window.ComposeUIViewController
 
