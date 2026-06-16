@@ -1,12 +1,16 @@
-package com.agl.ml.result.viewmodel
+package com.appgolive.meescanner.result.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.agl.ml.home.util.ScanResult
+import com.appgolive.meescanner.home.util.ScanResult
+import com.appgolive.meescanner.qr.viewmodel.QrViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.koin.compose.viewmodel.koinViewModel
 
-class ResultViewModel : ViewModel() {
+class ResultViewModel(
+    private val qrViewModel: QrViewModel
+) : ViewModel() {
 
     private val _scanResult =
         MutableStateFlow<ScanResult?>(null)

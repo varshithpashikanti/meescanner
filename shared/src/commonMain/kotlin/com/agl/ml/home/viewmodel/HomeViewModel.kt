@@ -1,8 +1,8 @@
-package com.agl.ml.home.viewmodel
+package com.appgolive.meescanner.home.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.agl.ml.home.util.AnalyzerType
-import com.agl.ml.home.util.ScanResult
+import com.appgolive.meescanner.home.util.AnalyzerType
+import com.appgolive.meescanner.home.util.ScanResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,6 +18,18 @@ class HomeViewModel : ViewModel(){
     private val _scanResult = MutableStateFlow<ScanResult?>(null)
 
     val scanResult : StateFlow<ScanResult?> = _scanResult.asStateFlow()
+
+
+    private val _triggerCapture = MutableStateFlow(false)
+    val triggerCapture = _triggerCapture.asStateFlow()
+
+    fun onCaptureTrigger() {
+        _triggerCapture.value = true
+    }
+
+    fun onCaptureCompleted() {
+        _triggerCapture.value = false
+    }
 
 
     fun onScanResult(

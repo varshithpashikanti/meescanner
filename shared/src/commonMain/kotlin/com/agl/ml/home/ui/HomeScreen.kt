@@ -1,4 +1,4 @@
-package com.agl.ml.home.ui
+package com.appgolive.meescanner.home.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -23,7 +25,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.agl.ml.CameraPreview
 import com.agl.ml.designsystem.MSBgGrey
 import com.agl.ml.designsystem.MSBlack
 import com.agl.ml.designsystem.MSGrey
@@ -31,28 +32,55 @@ import com.agl.ml.designsystem.MSPrimary
 import com.agl.ml.designsystem.MSSpacing
 import com.agl.ml.designsystem.MSWhite
 import com.agl.ml.designsystem.TabPills
-import com.agl.ml.home.util.ScanResult
-import com.agl.ml.home.viewmodel.HomeViewModel
-import com.agl.ml.qr.viewmodel.QrViewModel
+import com.agl.ml.document.DocumentScanner
+import com.appgolive.meescanner.CameraPreview
+import com.appgolive.meescanner.document.DocumentViewModel
+import com.appgolive.meescanner.home.util.AnalyzerType
+import com.appgolive.meescanner.home.util.ScanResult
+import com.appgolive.meescanner.home.viewmodel.HomeViewModel
 import mlkittrial.shared.generated.resources.Res
+import mlkittrial.shared.generated.resources.ic_history
+import mlkittrial.shared.generated.resources.ic_music
 import mlkittrial.shared.generated.resources.ic_scan
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier){
+fun HomeScreen(
+    onScanResult: (ScanResult, AnalyzerType) -> Unit,
+    onHistoryClick: () -> Unit,
+    modifier: Modifier = Modifier,
+){
 
     val homeViewModel : HomeViewModel = koinViewModel()
-    val qrViewModel: QrViewModel = koinViewModel()
-    val qrContent by qrViewModel.qrContent.collectAsState()
 
-    val availableApps by qrViewModel.availableApps.collectAsState()
+    val documentViewModel : DocumentViewModel =  koinViewModel()
+
+    val openScanner by documentViewModel.openScanner.collectAsState()
+
+    DocumentScanner(
+        trigger = openScanner,
+        onResult = {
+            documentViewModel.onScanSuccess(it)
+            onScanResult(
+                ScanResult.DocumentResult(
+                    pageCount = it.pageCount,
+                    pdfUri = it.pdfUri,
+                    pages = it.pages
+                ),
+                AnalyzerType.DOCUMENT
+            )
+        },
+        onError = {
+            documentViewModel.onScanError(it)
+        }
+    )
 
     val selectedTab by homeViewModel.selectedTab.collectAsState()
     val analyzerType by homeViewModel.selectedAnalyzer.collectAsState()
 
-    val scanResult by homeViewModel.scanResult.collectAsState()
+    val triggerCapture by homeViewModel.triggerCapture.collectAsState()
 
     Box(modifier = modifier
         .fillMaxSize())
@@ -75,35 +103,18 @@ fun HomeScreen(modifier: Modifier = Modifier){
                             ),
                         analyzerType = analyzerType,
                         onScanResult = { result ->
-
-                            when(result) {
-
-                                is ScanResult.QrResult -> {
-                                    qrViewModel.processQr(
-                                        result.rawValue
-                                    )
-                                }
-
-                                is ScanResult.TextResult -> {
-
-                                }
-
-                                is ScanResult.ObjectResult -> {
-
-                                }
-
-                                is ScanResult.DocumentResult -> {
-
-                                }
-
-                            }
-                        }
+                            onScanResult(result, analyzerType)
+                        },
+                        triggerCapture = triggerCapture,
+                        onCaptureCompleted = { homeViewModel.onCaptureCompleted() }
                     )
                 }
             }
+
+
             Column(modifier = Modifier.fillMaxWidth().padding(top = MSSpacing.xs, bottom = MSSpacing.xl)) {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(MSSpacing.sm)
+                    modifier = Modifier.fillMaxWidth().padding(vertical = MSSpacing.sm)
                 ) {
                     TabPills(
                         tabs = listOf(
@@ -114,64 +125,101 @@ fun HomeScreen(modifier: Modifier = Modifier){
                             "Photo"
                         ),
                         selectedTab = selectedTab,
-                        onTabSelected = {
-                            homeViewModel.onTabSelected(it)
+                        onTabSelected = { tab ->
+
+                            if(tab == "Document") {
+                                documentViewModel.onDocumentTabTapped()
+                            }else{
+                                homeViewModel.onTabSelected(tab)
+                            }
                         },
                         modifier = Modifier,
                         selectedBackgroundColor = MSBgGrey,
+                        unselectedBackgroundColor = MSBgGrey,
                         fontWeight = FontWeight.Normal,
                         selectedTextColor = MSPrimary,
-                        letterSpacing = 1.sp
+                        letterSpacing = 1.sp,
+                        verticalPadding = MSSpacing.md
                     )
                 }
                 Spacer(modifier = Modifier.Companion.height(MSSpacing.lg))
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = MSSpacing.lg),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ){
+                    Box(modifier = modifier
+                        .background(
+                            color = MSBgGrey,
+                            shape = RoundedCornerShape(100)
+                        )
+                        .padding(vertical = MSSpacing.md , horizontal = MSSpacing.xl)
+                        .clickable {
+
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.ic_music),
+                            modifier = modifier.size(24.dp),
+                            contentDescription = null,
+                            tint = MSWhite,
+                        )
+                    }
+
                     Box(modifier = modifier
                         .background(
                             color = MSPrimary,
                             shape = RoundedCornerShape(100)
                         )
-                        .padding(vertical = MSSpacing.lg , horizontal = MSSpacing.xxl)
                         .clickable {
+
+                            if(selectedTab == "Object Detection" || selectedTab == "Text Analyzer") {
+                                homeViewModel.onCaptureTrigger()
+                            }
+
                         }
+                        .padding(vertical = MSSpacing.xl , horizontal = MSSpacing.xxxl)
+
                     ) {
                         Icon(
                             painter = painterResource(Res.drawable.ic_scan),
-                            modifier = modifier.size(20.dp),
+                            modifier = modifier.size(24.dp),
                             contentDescription = null,
                             tint = MSBlack,
                         )
                     }
 
+                    Box(modifier = modifier
+                        .background(
+                            color = MSBgGrey,
+                            shape = RoundedCornerShape(100)
+                        )
+                        .clickable {
+                            onHistoryClick()
+                        }
+                        .padding(vertical = MSSpacing.md , horizontal = MSSpacing.xl)
+
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.ic_history),
+                            modifier = modifier.size(24.dp),
+                            contentDescription = null,
+                            tint = MSWhite,
+                        )
+                    }
+
+
                 }
             }
         }
 
-        Box(
-            modifier = Modifier.fillMaxSize().padding(MSSpacing.lg),
-            contentAlignment = Alignment.BottomCenter
-        ){
-            ScanResultSection(
-                analyzerType = analyzerType,
-                qrContent = qrContent,
-                availableApps = availableApps,
-                modifier = Modifier
-                    .padding(MSSpacing.md)
-                    .fillMaxWidth()
-                    .background(
-                        MSWhite,
-                        shape = RoundedCornerShape(
-                            topStart = 20.dp,
-                            topEnd = 20.dp,
-                        )
-                    )
-
-            )
-        }
+        Text(
+            text = "MeeScanner",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Medium,
+            color = MSWhite,
+            modifier = Modifier.align(Alignment.TopStart).padding(top = MSSpacing.lg , start = MSSpacing.lg)
+        )
 
 
     }

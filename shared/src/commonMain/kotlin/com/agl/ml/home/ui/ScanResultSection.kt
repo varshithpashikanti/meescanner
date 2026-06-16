@@ -1,45 +1,54 @@
-package com.agl.ml.home.ui
+package com.appgolive.meescanner.home.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.agl.ml.home.util.AnalyzerType
-import com.agl.ml.home.util.QrContent
-import com.agl.ml.qr.model.AppInfo
-import com.agl.ml.qr.ui.QrResultCard
+import com.agl.ml.document.DocumentResultScreen
+import com.agl.ml.result.ui.ObjectResultScreen
+import com.agl.ml.text.TextResultScreen
+import com.appgolive.meescanner.home.util.ScanResult
+import com.appgolive.meescanner.qr.ui.QrResultScreen
+import com.appgolive.meescanner.qr.viewmodel.QrViewModel
 
 @Composable
 fun ScanResultSection(
-    analyzerType: AnalyzerType,
-    qrContent: QrContent?,
-    availableApps: List<AppInfo>,
-    modifier: Modifier = Modifier
-) {
+    scanResult: ScanResult,
+    qrViewModel: QrViewModel,
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit
+){
+    when(scanResult) {
 
-    when(analyzerType) {
+        is ScanResult.QrResult -> {
+            QrResultScreen(
+                modifier = modifier,
+                qrViewModel = qrViewModel,
+                onBackClick = onBackClick,
+            )
+        }
 
-        AnalyzerType.QR -> {
-
-            QrResultCard(
-                qrContent = qrContent,
-                availableApps = availableApps,
+        is ScanResult.TextResult -> {
+            TextResultScreen(
+                text = scanResult.text,
+                frame = scanResult.frame,
                 modifier = modifier
             )
         }
 
-        AnalyzerType.TEXT -> {
-
+        is ScanResult.ObjectResult -> {
+            ObjectResultScreen(
+                frame = scanResult.frame,
+                objects = scanResult.objects,
+                modifier = modifier
+            )
         }
 
-        AnalyzerType.OBJECT -> {
-
-        }
-
-        AnalyzerType.DOCUMENT -> {
-
-        }
-
-        AnalyzerType.PHOTO -> {
-
+        is ScanResult.DocumentResult -> {
+            DocumentResultScreen(
+                uri = scanResult.pdfUri.toString(),
+                pages = scanResult.pageCount,
+                allPages = scanResult.pages,
+                modifier = modifier
+            )
         }
     }
 }

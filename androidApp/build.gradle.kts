@@ -25,11 +25,11 @@ dependencies {
 }
 
 android {
-    namespace = "com.agl.ml"
+    namespace = "com.appgolive.meescanner"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.agl.ml"
+        applicationId = "com.appgolive.meescanner"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1

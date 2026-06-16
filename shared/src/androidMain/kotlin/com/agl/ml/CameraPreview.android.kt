@@ -1,10 +1,13 @@
-package com.agl.ml
+package com.appgolive.meescanner
 
 import android.Manifest
+import android.app.Activity.RESULT_OK
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
@@ -42,10 +45,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.agl.ml.home.util.AnalyzerType
-import com.agl.ml.home.util.ScanResult
+import com.appgolive.meescanner.home.util.AnalyzerType
+import com.appgolive.meescanner.home.util.DetectedObjectInfo
+import com.appgolive.meescanner.home.util.ScanResult
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions
+import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_FORMAT_JPEG
+import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_FORMAT_PDF
+import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.SCANNER_MODE_FULL
+import com.google.mlkit.vision.documentscanner.*
+import com.google.mlkit.vision.objects.ObjectDetection
+import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 
 @OptIn(ExperimentalGetImage::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -53,29 +66,12 @@ import com.google.mlkit.vision.common.InputImage
 actual fun CameraPreview(
     analyzerType: AnalyzerType,
     onScanResult: (ScanResult) -> Unit,
+    triggerCapture: Boolean,
+    onCaptureCompleted: () -> Unit,
     modifier: Modifier
 ) {
 
     val context = LocalContext.current
-
-    var barcodeValue by remember { mutableStateOf("") }
-    var barcodeFormat by remember { mutableStateOf("") }
-    var barcodeBounds by remember { mutableStateOf("") }
-    var barcodeCorners by remember { mutableStateOf("") }
-
-
-    var frame by remember {
-        mutableStateOf<Bitmap?>(null)
-    }
-
-    LaunchedEffect(analyzerType) {
-        frame = null
-
-        barcodeValue = ""
-        barcodeFormat = ""
-        barcodeBounds = ""
-        barcodeCorners = ""
-    }
 
     var hasCameraPermission by remember {
         mutableStateOf(
@@ -114,30 +110,83 @@ actual fun CameraPreview(
             BarcodeScanning.getClient()
         }
 
+        val objectDetector = remember {
+            val options = ObjectDetectorOptions.Builder()
+                .setDetectorMode(ObjectDetectorOptions.SINGLE_IMAGE_MODE)
+                .enableMultipleObjects()
+                .enableClassification()
+                .build()
+            ObjectDetection.getClient(options)
+        }
+
+        val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+
+
+
+
         Box(modifier = modifier) {
 
-            if (frame != null) {
-
-                Image(
-                    bitmap = frame!!.asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-
-            } else {
-
-                AndroidView(
-                    factory = { previewView },
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
+            AndroidView(
+                factory = { previewView },
+                modifier = Modifier.fillMaxSize()
+            )
 
         }
 
+        LaunchedEffect(triggerCapture) {
+
+
+            if (triggerCapture && analyzerType == AnalyzerType.OBJECT) {
+                val originalBitmap = previewView.bitmap ?: return@LaunchedEffect
+                val image = InputImage.fromBitmap(originalBitmap, 0)
+                objectDetector.process(image)
+                    .addOnSuccessListener { objects ->
+                        val detectedObjects = objects.map { obj ->
+                            val box = obj.boundingBox
+
+                            // 1. Constrain coordinates within original bitmap boundaries to prevent crashes
+                            val left = box.left.coerceIn(0, originalBitmap.width)
+                            val top = box.top.coerceIn(0, originalBitmap.height)
+                            val right = box.right.coerceIn(0, originalBitmap.width)
+                            val bottom = box.bottom.coerceIn(0, originalBitmap.height)
+
+                            // 2. Calculate valid width and height
+                            val width = right - left
+                            val height = bottom - top
+
+                            // 3. Perform the crop only if the dimensions are valid
+                            val croppedBitmap = if (width > 0 && height > 0) {
+                                Bitmap.createBitmap(originalBitmap, left, top, width, height)
+                            } else {
+                                null
+                            }
+
+                            DetectedObjectInfo(
+                                label = obj.labels.firstOrNull()?.text ?: "Unknown",
+                                confidence = obj.labels.firstOrNull()?.confidence ?: 0f,
+                                boundingLeft = left,
+                                boundingTop = top,
+                                boundingRight = right,
+                                boundingBottom = bottom,
+                                croppedImage = croppedBitmap
+                            )
+                        }
+                        onScanResult(
+                            ScanResult.ObjectResult(
+                                frame = previewView.bitmap,
+                                objects = detectedObjects
+                            )
+                        )
+                        onCaptureCompleted()
+                    }
+            }
+        }
+
+
         LaunchedEffect(
             previewView,
-            analyzerType
+            analyzerType,
+            triggerCapture
         ) {
 
             val cameraProvider = cameraProviderFuture.get()
@@ -162,6 +211,8 @@ actual fun CameraPreview(
                     imageProxy.imageInfo.rotationDegrees
                 )
 
+
+
                 when (analyzerType) {
 
                     AnalyzerType.QR -> {
@@ -172,26 +223,13 @@ actual fun CameraPreview(
                                 if (barcodes.isNotEmpty()) {
 
                                     val barcode = barcodes.first()
-
                                     onScanResult(
                                         ScanResult.QrResult(
+                                            frame = previewView.bitmap,
                                             rawValue = barcode.rawValue.orEmpty()
+
                                         )
                                     )
-
-                                    frame = previewView.bitmap
-
-                                    barcodeValue =
-                                        barcode.rawValue.orEmpty()
-
-                                    barcodeFormat =
-                                        barcode.format.toString()
-
-                                    barcodeBounds =
-                                        barcode.boundingBox.toString()
-
-                                    barcodeCorners =
-                                        barcode.cornerPoints.toString()
 
                                     cameraProvider.unbindAll()
                                 }
@@ -201,11 +239,37 @@ actual fun CameraPreview(
                             }
                     }
 
-                    AnalyzerType.TEXT,
-                    AnalyzerType.OBJECT,
-                    AnalyzerType.DOCUMENT,
-                    AnalyzerType.PHOTO -> {
+                    AnalyzerType.OBJECT -> {
+                        imageProxy.close()
+                    }
 
+                    AnalyzerType.TEXT -> {
+                        if(triggerCapture) {
+                            recognizer.process(image)
+                                .addOnSuccessListener { visionText ->
+                                    // Task completed successfully
+                                    // ...
+                                    onScanResult(
+                                        ScanResult.TextResult(
+                                            frame = previewView.bitmap,
+                                            text = visionText.text
+                                        )
+                                    )
+                                    onCaptureCompleted()
+                                    imageProxy.close()
+
+                                }
+                                .addOnFailureListener { e ->
+                                    imageProxy.close()
+                                }
+                        }
+                    }
+
+                    AnalyzerType.DOCUMENT -> {
+                        imageProxy.close()
+                    }
+
+                    AnalyzerType.PHOTO -> {
                         imageProxy.close()
                     }
                 }

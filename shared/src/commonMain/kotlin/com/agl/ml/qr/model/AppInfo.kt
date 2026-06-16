@@ -1,4 +1,4 @@
-package com.agl.ml.qr.model
+package com.appgolive.meescanner.qr.model
 
 
 data class AppInfo(

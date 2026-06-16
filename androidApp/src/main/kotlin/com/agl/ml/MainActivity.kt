@@ -1,4 +1,4 @@
-package com.agl.ml
+package com.appgolive.meescanner
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
