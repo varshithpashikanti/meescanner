@@ -1,4 +1,4 @@
-package com.appgolive.meescanner.qr.ui
+package com.agl.ml.qr.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,9 +38,9 @@ import com.agl.ml.designsystem.MSHorizontalDivider
 import com.agl.ml.designsystem.MSSpacing
 import com.agl.ml.designsystem.MSWhite
 import com.agl.ml.designsystem.MsBanner
-import com.appgolive.meescanner.qr.model.AppInfo
-import com.appgolive.meescanner.qr.viewmodel.QrViewModel
-import com.appgolive.meescanner.util.QrContent
+import com.agl.ml.qr.model.AppInfo
+import com.agl.ml.qr.viewmodel.QrViewModel
+import com.agl.ml.home.util.QrContent
 import org.koin.compose.viewmodel.koinViewModel
 
 

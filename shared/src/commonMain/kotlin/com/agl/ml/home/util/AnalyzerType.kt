@@ -1,4 +1,4 @@
-package com.appgolive.meescanner.home.util
+package com.agl.ml.home.util
 
 
 enum class AnalyzerType {

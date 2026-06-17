@@ -2,9 +2,8 @@ package com.agl.ml.history.usecase
 
 import com.agl.ml.history.repository.HistoryRepository
 import com.appgolive.meescanner.entity.ScanHistoryEntity
-import com.appgolive.meescanner.home.util.AnalyzerType
-import com.appgolive.meescanner.home.util.ScanResult
-import kotlinx.datetime.TimeZone
+import com.agl.ml.home.util.AnalyzerType
+import com.agl.ml.home.util.ScanResult
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 

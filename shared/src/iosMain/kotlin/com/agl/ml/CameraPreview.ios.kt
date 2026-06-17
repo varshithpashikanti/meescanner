@@ -1,4 +1,4 @@
-package com.appgolive.meescanner
+package com.agl.ml
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -10,10 +10,8 @@ import androidx.compose.ui.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.viewinterop.UIKitView
-import com.agl.ml.IOSFrameAnalyzer
-import com.agl.ml.makeCameraPreviewView
-import com.appgolive.meescanner.home.util.AnalyzerType
-import com.appgolive.meescanner.home.util.ScanResult
+import com.agl.ml.home.util.AnalyzerType
+import com.agl.ml.home.util.ScanResult
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.AVFoundation.*
 import platform.darwin.dispatch_queue_create

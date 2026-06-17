@@ -1,9 +1,7 @@
-package com.appgolive.meescanner.document
+package com.agl.ml.document
 
 import androidx.lifecycle.ViewModel
-import com.agl.ml.document.DocumentScanResult
-import com.agl.ml.document.DocumentScanState
-import com.appgolive.meescanner.qr.ui.AppResolver
+import com.agl.ml.qr.ui.AppResolver
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

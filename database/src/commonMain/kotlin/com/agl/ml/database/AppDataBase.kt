@@ -14,11 +14,13 @@ import com.appgolive.meescanner.entity.ScanHistoryEntity
     ],
     version = 1
 )
-//@ConstructedBy(AppDatabaseConstructor::class)
+@ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun scanHistoryDao(): ScanHistoryDao
 }
 
-//@Suppress("NO_ACTUAL_FOR_EXPECT")
-//expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase>
+@Suppress("NO_ACTUAL_FOR_EXPECT")
+expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
+    override fun initialize(): AppDatabase
+}

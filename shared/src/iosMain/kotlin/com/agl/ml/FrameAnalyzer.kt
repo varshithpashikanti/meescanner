@@ -1,7 +1,7 @@
 package com.agl.ml
 
-import com.appgolive.meescanner.home.util.AnalyzerType
-import com.appgolive.meescanner.home.util.ScanResult
+import com.agl.ml.home.util.AnalyzerType
+import com.agl.ml.home.util.ScanResult
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.AVFoundation.*
 import platform.CoreMedia.CMSampleBufferRef
@@ -14,12 +14,15 @@ class IOSFrameAnalyzer(
     private val onCaptureCompleted: () -> Unit
 ) : NSObject(), AVCaptureVideoDataOutputSampleBufferDelegateProtocol {
 
+    private val barcodeScanner = IOSBarcodeScanner()
+
     @OptIn(ExperimentalForeignApi::class)
     override fun captureOutput(
         output: AVCaptureOutput,
         didOutputSampleBuffer: CMSampleBufferRef?,
         fromConnection: AVCaptureConnection
     ) {
+
 
         if (didOutputSampleBuffer == null) return
 

@@ -1,13 +1,13 @@
-package com.appgolive.meescanner.home.ui
+package com.agl.ml.home.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.agl.ml.document.DocumentResultScreen
 import com.agl.ml.result.ui.ObjectResultScreen
 import com.agl.ml.text.TextResultScreen
-import com.appgolive.meescanner.home.util.ScanResult
-import com.appgolive.meescanner.qr.ui.QrResultScreen
-import com.appgolive.meescanner.qr.viewmodel.QrViewModel
+import com.agl.ml.home.util.ScanResult
+import com.agl.ml.qr.ui.QrResultScreen
+import com.agl.ml.qr.viewmodel.QrViewModel
 
 @Composable
 fun ScanResultSection(

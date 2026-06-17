@@ -1,9 +1,9 @@
-package com.appgolive.meescanner
+package com.agl.ml
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.appgolive.meescanner.home.util.AnalyzerType
-import com.appgolive.meescanner.home.util.ScanResult
+import com.agl.ml.home.util.AnalyzerType
+import com.agl.ml.home.util.ScanResult
 
 @Composable
 expect fun CameraPreview(

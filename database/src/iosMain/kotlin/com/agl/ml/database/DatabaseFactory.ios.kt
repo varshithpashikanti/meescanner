@@ -24,6 +24,7 @@ actual class DatabaseFactory {
                 error = null
             )!!
 
+        println("created database")
         val dbPath = documentsUrl.path!! + "/scanner.db"
 
         return Room.databaseBuilder<AppDatabase>(

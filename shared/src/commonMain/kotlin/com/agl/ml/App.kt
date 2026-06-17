@@ -1,4 +1,4 @@
-package com.appgolive.meescanner
+package com.agl.ml
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,11 +15,11 @@ import androidx.navigation.compose.rememberNavController
 import com.agl.ml.designsystem.MSBgGrey
 import com.agl.ml.history.ui.HistoryScreen
 import com.agl.ml.history.viewmodel.HistoryViewModel
-import com.appgolive.meescanner.document.DocumentViewModel
-import com.appgolive.meescanner.home.ui.HomeScreen
-import com.appgolive.meescanner.qr.viewmodel.QrViewModel
-import com.appgolive.meescanner.result.ui.ResultScreen
-import com.appgolive.meescanner.result.viewmodel.ResultViewModel
+import com.agl.ml.document.DocumentViewModel
+import com.agl.ml.home.ui.HomeScreen
+import com.agl.ml.qr.viewmodel.QrViewModel
+import com.agl.ml.result.ui.ResultScreen
+import com.agl.ml.result.viewmodel.ResultViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

@@ -1,4 +1,4 @@
-package com.appgolive.meescanner.util
+package com.agl.ml.home.util
 
 import coil3.Bitmap
 

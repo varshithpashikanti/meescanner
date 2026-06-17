@@ -17,6 +17,7 @@ class HistoryRepositoryImpl(
     }
 
     override fun getHistory(): Flow<List<ScanHistoryEntity>> {
+        println("Getting history")
         return dao.getAll()
     }
 }

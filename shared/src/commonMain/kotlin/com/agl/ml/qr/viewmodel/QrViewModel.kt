@@ -1,13 +1,13 @@
-package com.appgolive.meescanner.qr.viewmodel
+package com.agl.ml.qr.viewmodel
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import coil3.Bitmap
-import com.appgolive.meescanner.qr.model.AppInfo
-import com.appgolive.meescanner.qr.ui.AppResolver
-import com.appgolive.meescanner.util.QrContent
+import com.agl.ml.qr.model.AppInfo
+import com.agl.ml.qr.ui.AppResolver
+import com.agl.ml.home.util.QrContent
 
 class QrViewModel(private val appResolver: AppResolver) : ViewModel() {
 

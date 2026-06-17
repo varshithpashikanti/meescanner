@@ -227,6 +227,13 @@ fun HistoryItem(history: ScanHistoryEntity) {
                 fontWeight = FontWeight.SemiBold,
                 color = MSWhite,
             )
+            Text(
+                text = history.data,
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.Normal,
+                color = MSWhite,
+            )
+
         }
 
     }

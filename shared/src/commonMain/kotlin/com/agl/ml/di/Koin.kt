@@ -1,6 +1,6 @@
-package com.appgolive.meescanner.di
+package com.agl.ml.di
 
-import com.agl.ml.di.platformModule
+import com.appgolive.meescanner.di.databaseModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 

@@ -1,6 +1,6 @@
-package com.appgolive.meescanner.qr.ui
+package com.agl.ml.qr.ui
 
-import com.appgolive.meescanner.qr.model.AppInfo
+import com.agl.ml.qr.model.AppInfo
 
 
 expect class AppResolver {

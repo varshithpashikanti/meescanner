@@ -1,4 +1,4 @@
-package com.appgolive.meescanner.qr.ui
+package com.agl.ml.qr.ui
 
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -10,7 +10,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.widget.Toast
 import androidx.core.content.FileProvider
-import com.appgolive.meescanner.qr.model.AppInfo
+import com.agl.ml.qr.model.AppInfo
 import java.io.ByteArrayOutputStream
 import java.io.File
 

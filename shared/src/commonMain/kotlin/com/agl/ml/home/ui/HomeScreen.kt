@@ -1,4 +1,4 @@
-package com.appgolive.meescanner.home.ui
+package com.agl.ml.home.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,11 +33,11 @@ import com.agl.ml.designsystem.MSSpacing
 import com.agl.ml.designsystem.MSWhite
 import com.agl.ml.designsystem.TabPills
 import com.agl.ml.document.DocumentScanner
-import com.appgolive.meescanner.CameraPreview
-import com.appgolive.meescanner.document.DocumentViewModel
-import com.appgolive.meescanner.home.util.AnalyzerType
-import com.appgolive.meescanner.home.util.ScanResult
-import com.appgolive.meescanner.home.viewmodel.HomeViewModel
+import com.agl.ml.CameraPreview
+import com.agl.ml.document.DocumentViewModel
+import com.agl.ml.home.util.AnalyzerType
+import com.agl.ml.home.util.ScanResult
+import com.agl.ml.home.viewmodel.HomeViewModel
 import mlkittrial.shared.generated.resources.Res
 import mlkittrial.shared.generated.resources.ic_history
 import mlkittrial.shared.generated.resources.ic_music

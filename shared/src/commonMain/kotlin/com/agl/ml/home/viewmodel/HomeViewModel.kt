@@ -1,8 +1,8 @@
-package com.appgolive.meescanner.home.viewmodel
+package com.agl.ml.home.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.appgolive.meescanner.home.util.AnalyzerType
-import com.appgolive.meescanner.home.util.ScanResult
+import com.agl.ml.home.util.AnalyzerType
+import com.agl.ml.home.util.ScanResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

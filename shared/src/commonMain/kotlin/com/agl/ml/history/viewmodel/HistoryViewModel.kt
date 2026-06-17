@@ -4,13 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.agl.ml.history.ui.HistoryUiState
 import com.agl.ml.history.usecase.ScanHistoryUseCase
-import com.appgolive.meescanner.home.util.AnalyzerType
-import com.appgolive.meescanner.home.util.ScanResult
+import com.agl.ml.home.util.AnalyzerType
+import com.agl.ml.home.util.ScanResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlin.time.Clock
 
 class HistoryViewModel(
     private val scanHistoryUseCase: ScanHistoryUseCase

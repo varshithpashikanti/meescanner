@@ -1,15 +1,15 @@
-package com.appgolive.meescanner.result.ui
+package com.agl.ml.result.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import com.appgolive.meescanner.home.util.ScanResult
-import com.appgolive.meescanner.qr.viewmodel.QrViewModel
-import com.appgolive.meescanner.result.viewmodel.ResultViewModel
+import com.agl.ml.home.util.ScanResult
+import com.agl.ml.qr.viewmodel.QrViewModel
+import com.agl.ml.result.viewmodel.ResultViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.appgolive.meescanner.document.DocumentViewModel
-import com.appgolive.meescanner.home.ui.ScanResultSection
+import com.agl.ml.document.DocumentViewModel
+import com.agl.ml.home.ui.ScanResultSection
 
 @Composable
 fun ResultScreen(
@@ -32,11 +32,11 @@ fun ResultScreen(
                     frame = result.frame
                 )
             }
-            is ScanResult.DocumentResult ->{
-                documentViewModel.processDoc(
-                    link = result.pdfUri
-                )
-            }
+//            is ScanResult.DocumentResult ->{
+//                documentViewModel.processDoc(
+//                    link = result.pdfUri
+//                )
+//            }
             else -> {}
         }
 
