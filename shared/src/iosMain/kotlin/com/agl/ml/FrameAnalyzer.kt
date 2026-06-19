@@ -14,7 +14,6 @@ class IOSFrameAnalyzer(
     private val onCaptureCompleted: () -> Unit
 ) : NSObject(), AVCaptureVideoDataOutputSampleBufferDelegateProtocol {
 
-    private val barcodeScanner = IOSBarcodeScanner()
 
     @OptIn(ExperimentalForeignApi::class)
     override fun captureOutput(
