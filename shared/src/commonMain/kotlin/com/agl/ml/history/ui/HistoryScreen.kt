@@ -41,6 +41,8 @@ import mlkittrial.shared.generated.resources.ic_search
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import com.appgolive.meescanner.entity.ScanHistoryEntity
@@ -55,15 +57,24 @@ fun HistoryScreen(
     historyViewModel: HistoryViewModel = koinViewModel(),
     onBackClick: () -> Unit
 ){
+
+    val showDetailSheet by remember { mutableStateOf(false) }
     val selectedFilterTab by historyViewModel.selectedFilterTab.collectAsState()
 
-    val tabList = listOf("ALL" , "SCANNER" , "TEXT" , "OBJECT" , "DOCUMENT" , "PHOTO")
-
+    val tabList = listOf("ALL" , "QR" , "TEXT" , "OBJECT" , "DOCUMENT" , "PHOTO")
     LaunchedEffect(Unit){
         historyViewModel.loadHistory()
     }
     val historyUiState by historyViewModel.historyUiState.collectAsState()
 
+    val history = historyViewModel.historyUiState.value
+    val filteredHistory = when(history){
+        is HistoryUiState.Success -> {
+            if(selectedFilterTab == "ALL") history.history else
+                history.history.filter { it.scanType == selectedFilterTab }
+        }
+        else -> emptyList()
+    }
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -124,7 +135,7 @@ fun HistoryScreen(
                 tabs = tabList,
                 selectedTab = selectedFilterTab,
                 onTabSelected = {
-
+                    historyViewModel.onTabSelected(it)
                 },
                 modifier = Modifier,
                 selectedBackgroundColor = MSWhite,
@@ -144,9 +155,8 @@ fun HistoryScreen(
                     LazyColumn(
                         verticalArrangement = Arrangement.spacedBy(MSSpacing.sm),
                     ){
-                        items(state.history){history ->
+                        items(filteredHistory){history ->
                             HistoryItem(history)
-
                         }
                     }
                 }

@@ -135,11 +135,13 @@ fun HomeScreen(
                         },
                         modifier = Modifier,
                         selectedBackgroundColor = MSBgGrey,
-                        unselectedBackgroundColor = MSBgGrey,
+                        unselectedBackgroundColor = MSGrey,
                         fontWeight = FontWeight.Normal,
                         selectedTextColor = MSPrimary,
                         letterSpacing = 1.sp,
-                        verticalPadding = MSSpacing.md
+                        verticalPadding = MSSpacing.sm,
+                        applyBorder = false,
+
                     )
                 }
                 Spacer(modifier = Modifier.Companion.height(MSSpacing.lg))

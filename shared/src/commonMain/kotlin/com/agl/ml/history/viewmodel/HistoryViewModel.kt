@@ -31,6 +31,10 @@ class HistoryViewModel(
         }
     }
 
+    fun onTabSelected(tab: String) {
+        _selectedFilterTab.value = tab
+    }
+
     fun loadHistory(){
         viewModelScope.launch {
             _historyUiState.value = HistoryUiState.Loading
