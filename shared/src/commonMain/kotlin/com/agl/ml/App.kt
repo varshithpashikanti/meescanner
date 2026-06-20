@@ -13,6 +13,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.agl.ml.designsystem.MSBgGrey
+import com.agl.ml.designsystem.MSGrey
+import com.agl.ml.designsystem.MSWhite
 import com.agl.ml.history.ui.HistoryScreen
 import com.agl.ml.history.viewmodel.HistoryViewModel
 import com.agl.ml.document.DocumentViewModel
@@ -24,16 +26,13 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun App(
-
-) {
-
-
+fun App() {
     MaterialTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             contentWindowInsets = WindowInsets.safeDrawing,
-            containerColor = MSBgGrey
+            containerColor = MSGrey,
+            contentColor = MSWhite
         ){innerPadding ->
             val navController = rememberNavController()
 
@@ -72,7 +71,9 @@ fun App(
                     HistoryScreen(
                         onBackClick = {
                             navController.popBackStack()
-                        }
+                        },
+                        historyViewModel = historyViewModel,
+                        qrViewModel = qrViewModel
                     )
                 }
 

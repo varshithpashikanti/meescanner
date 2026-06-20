@@ -8,5 +8,6 @@ val MSWhite = Color(0xFFFFFFFF)
 val MSBlack = Color(0xFF000000)
 val MSGrey = Color(0xFF212121)
 val MSBgGrey = Color(0xFF323232)
+val MSLightGrey = Color(0xFF8B8B8B)
 
 val MSHorizontalDivider = Color(0xFF454545)

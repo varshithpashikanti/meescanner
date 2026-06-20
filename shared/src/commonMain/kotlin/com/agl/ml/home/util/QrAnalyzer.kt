@@ -6,7 +6,7 @@ object QrContentAnalyzer {
 
     fun analyze(
         rawValue: String,
-        frame: Bitmap?
+        frame: Bitmap? = null
     ): QrContent {
 
         return when {
